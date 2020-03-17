@@ -433,7 +433,8 @@ module ActionDispatch
 
         @parent_jar = parent_jar
         @options = options
-        secret = key_generator.generate_key(@options[:encrypted_cookie_salt], 32)
+        # truncate secret to 32 chars to match previous behaviour
+        secret = key_generator.generate_key(@options[:encrypted_cookie_salt])[0..31]
         sign_secret = key_generator.generate_key(@options[:encrypted_signed_cookie_salt])
         @encryptor = ActiveSupport::MessageEncryptor.new(secret, sign_secret)
       end
